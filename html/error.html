@@ -2,80 +2,14 @@
 <html lang="en">
 
 <head>
-	<title>Portail Captif de Marcelin / Marcelin's Captive Portal</title>
+	<title>Portail Captif de Marcelin</title>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<script src="captiveportal-jquery.min.js"></script>
 	<script src="captiveportal-bootstrap.min.js"></script>
 	<link href="captiveportal-bootstrap.min.css" rel="stylesheet">
-
-	<style type="text/css">
-		body {
-			background: url(captiveportal-login_bg.jpg) no-repeat center center fixed;
-			background: url(captiveportal-pinlayer2.png), url(captiveportal-pinlayer1.png), url(captiveportal-login_bg.jpg);
-		}
-
-		@media (max-width: 673px) {
-			body{font-size: 12px;}
-		}
-
-
-		.vertical-offset-100 {
-			padding-top: 50px;
-		}
-
-		.flotte {
-			float: left;
-		}
-
-		img {
-			max-width: 100%;
-			height: auto;
-		}
-
-		#menu {
-			position: fixed;
-			right: 0;
-			top: 28%;
-			width: 7em;
-			margin-top: -2.5em;
-			background-color: rgba(9, 98, 8, 0.36);
-			border-radius: 2em 0.5em 0.5em 2em;
-
-		}
-	</style>
-
-	<script type="text/javascript">
-		$(document).ready(function(){
-			$("#acceptConditions").prop("checked", false);
-			$("#block-login").css("display", "none");
-			
-			$("#acceptConditions").click(function(){
-				if($(this).is(":checked")){
-					$("#block-login").css("display", "inline");
-				} else {
-					$("#block-login").css("display", "none");
-				}
-			});
-		});
-		var signe = -1;
-		var clignotementFading = function () {
-			var obj = document.getElementById('LblClignotant');
-			if (obj.style.opacity >= 0.96) {
-				signe = -1;
-			}
-			if (obj.style.opacity <= 0.04) {
-				signe = 1;
-			}
-			obj.style.opacity = (obj.style.opacity * 1) + (signe * 0.04);
-		};
-
-		// mise en place de l appel de la fonction toutes les 0.085 secondes
-		// Pour arrêter le clignotement : clearInterval(periode);
-		periode = setInterval(clignotementFading, 60);
-	</script>
-
-
+	<script src="captiveportal-qrcode.min.js"></script>
+  	<link href="captiveportal-custom-style.css" rel="stylesheet">
 	<script src="captiveportal-tweenlite.min.js"></script>
 </head>
 
@@ -83,30 +17,33 @@
 	<div class="container">
 		<div class="col-md-6 col-md-offset-3">
 			<div class="row vertical-offset-100">
-				<div class="panel panel-default">
+				<div class="panel panel-default panel-help">
+					<!-- Help button on border -->
+					<button type="button" class="btn btn-link help-btn" data-toggle="modal" data-target="#tchango" id="LblClignotant">
+						<img src="captiveportal-help.png" width="32" height="32" alt="Aide">
+					</button>
 					<div class="panel-heading">
 						<h3 class="panel-title" align="center">
-							<b>Accord d'acc&egrave;s au r&eacute;seau de Marcelin</b>
+							<b>🔒 Accord d'acc&egrave;s au r&eacute;seau de Marcelin</b>
 						</h3>
+						
 					</div>
 					<div class="panel-body">
-						<form method="post" action="$PORTAL_ACTION$" accept-charset="UTF-8" role="form">
+						<form id="loginForm" method="post" action="$PORTAL_ACTION$" accept-charset="UTF-8" role="form">
+							<input type="hidden" name="auth_user" id="hiddenQrUsername">
+
 							<fieldset>
-									<h4 class="text-center" style="color:red">Nom d'utilisateur ou mot de passe invalide. Veuillez les verifier puis recommencez</h4>
-								<p style="line-height:25px;" align="justify">Vous êtes responsable de la s&eacute;curit&eacute; lors de l’utilisation de ce portail et des ressources mises à
-									votre disposition. L'utilisation des ressources de ce portail pour ce qui suit est strictement interdite:
+								<h4 class="text-center" style="color:red">Nom d'utilisateur, mot de passe ou code invalide. Veuillez les verifier puis recommencez</h4>
+								<p style="line-height:25px;" align="justify">Vous êtes responsable de la s&eacute;curit&eacute; lors de l' utilisation de ce portail. L'utilisation de ce portail pour ce qui suit est strictement interdite:
 								</p>
 								<ul>
-									<li style="line-height:25px;">Causer une brèche de s&eacute;curit&eacute; sur le portail ou en l’utilisant comme moyen d’accès à d’autres ressources... </li>
+									<li style="line-height:25px;">Causer une brèche de s&eacute;curit&eacute; sur le portail</li>
 
-									<li style="line-height:25px;">Causer une interruption de services sur ce portail ou sur d’autres r&eacute;seaux à partir de ce portail...</li>
-									<li>L’exportation ou importation des logiciels, des informations techniques, des logiciels de chiffrement, ou de la
-										technologie en violation des lois internationales ou régionales de contrôle des exportations ...
+									<li style="line-height:25px;">Causer une interruption de services sur ce portail ou sur d' autres r&eacute;seaux à partir de ce portail...</li>
+									<li>L'exportation ou importation des logiciels, des informations techniques et/ou des logiciels de chiffrement.
 									</li>
 								</ul>
-								<p style="line-height:25px;" align="justify">Toute tentative de violation de cet accord et/ou d'actions malintentionn&eacute;es sera s&eacute;vèrement punie et
-									même passible de poursuites judiciaires. 
-								</p>
+                  				<p class="small-note">Toute tentative de violation de cet accord peut entraîner des poursuites judiciaires.</p>
 
 								<div class="form-check">
 									<input type="checkbox" class="form-check-input" id="acceptConditions">
@@ -115,139 +52,109 @@
 								<br>
 
 								<div id="block-login">
-									<div class="form-group">
-										<input name="auth_user" type="text" placeholder="Nom d'utilisateur" class="form-control">
-									</div>
-									<div class="form-group">
-										<input name="auth_pass" type="password" placeholder="Mot de passe" class="form-control">
+
+									<div class="qr" id="block-qr">
+										<strong>Connexion par QR Code</strong>
+										<p>Scannez un code Qr pour l'accès</p>
+										<div id="reader"></div>
+										<div id="result"></div>
+										<br>
 									</div>
 
+									<div class="form-check">
+									<input type="checkbox" class="form-check-input" id="connexionstandard">
+									<label class="form-check-label" for="connexionstandard">Connexion par la méthode standard</label>
+									</div>
+									<br>
+									
+									<div class="qr" id="block-connexionstandard">
+										<p>Saisissez votre login et password</p>
+										<div class="form-group">
+											<input name="auth_user" type="text" placeholder="👤 Nom d'utilisateur" class="form-control">
+										</div>
+										<div class="form-group">
+											<input name="auth_pass" type="password" placeholder="🔑 Mot de passe" class="form-control">
+										</div>
+									</div>
+
+									<input name="auth_voucher" type="hidden">
+									
 									<input class="btn btn-lg btn-success btn-block" name="accept" type="submit" value="Connexion">
-									<input name="redirurl" type="hidden" value="captiveportal-success.html">
+									<input name="redirurl" type="hidden" value="$PORTAL_REDIRURL$">
 								</div>
-
+								
 							</fieldset>
 						</form>	
 
-						<!--1st Modal content-->
+						<!--Modal content-->
 						<div class="modal fade" id="tchango" role="dialog">
 							<div class="modal-dialog">
 								<div class="modal-content">
 									<div class="modal-header">
-										<button type="button" class="close" data-dismiss="modal">&times;</button>
+									<button type="button" class="close" data-dismiss="modal">&times;</button>
 										<h3 class="panel-title" align="center">
 											<b>Comment se connecter au r&eacute;seau de Marcelin : how to?</b>
 										</h3>
 										<br>
-									</div>
-									<div class="modal-body">
-										<div>
-											<p align="justify" style="line-height:25px;">Ce portail vous donne la possibilit&eacute; d'acceder aux ressources intranet/internet de votre &eacute;tablissement.
-												La proc&eacute;dure ci-dessous d&eacute;crit les &eacute;tapes n&eacute;cesaires à l'identification sur le portail
-												:
-											</p>
-											<ul>
-												<li>A l'aide de votre carte d'accès: les paramètres,tels que encadr&eacute;s en rouge sont réquis.</li>
-											</ul>
-											<p align="center">
-												<img src="captiveportal-img.jpg" border="1" width="350" height="250">
-											</p>
-											<ul>
-												<li> Si vous rencontrez des problèmes de connexion, veuillez vous rapprocher de la cellule Informatique (
-													<b>Salle 206</b>) muni(e) de votre carte d'accès ou reçu d'inscription. </li>
-											</ul>
-											<p align="justify" style="line-height:25px;">
-												<b>
-													<u>Attention!</u>
-												</b> Votre carte d'acc&egrave;s est dor&eacute;navant une pièce confidentielle. Ne la prêtez ni la confiez à personne.
-												Bien vouloir vous rapprocher de l'administration pour toutes vos préocupations.</p>
-
-										</div>
-									</div>
 								</div>
 							</div>
-						</div>
-
-						<!-- 2nd Modal content-->
-						<div class="modal fade" id="azebaze" role="dialog">
-							<div class="modal-dialog">
-								<div class="modal-content">
-									<div class="modal-header">
-										<button type="button" class="close" data-dismiss="modal">&times;</button>
-										<h3 class="panel-title" align="center">
-											<b>T&eacute;l&eacute;chargez l'application Androïd</b>
-										</h3>
-										<br>
-									</div>
-									<div class="modal-body">
-
-										<p align="left">
-											<img src="captiveportal-calendar.png" border="1" />
-										</p>
-										<div align="justify">
-											<p align="justify" style="line-height:25px;">Votre application Androïd est d&eacute;sormais disponible sur PLAYSTORE. Cette application vous permet d'acceder
-												à votre emploi du temps de la semaine et d'avoir un suivi de vos enseignements. Recherchez sur PLAYSTORE l'application
-												"myiuc".
-											</p>
-										</div>
-										<div>
-											<p align="center">
-												<!--<a  href="https://play.google.com/store/apps/details?id=seed.prie.iuc.morpheusApp" onclick="window.open(this.href); return false;"><img src="captiveportal-app.png" border="5" /></a>-->
-												<img src="captiveportal-app.png" border="5" />
-											</p>
-										</div>
-										<br>
-										<p align="center">Connectez-vous à l'aide de votre adresse email myiuc et votre matricule situ&eacute;s sur votre carte d'&eacute;tudiant</p>
-										<br>
-									</div>
-								</div>
-							</div>
-						</div>
-						<!-- 3rd Modal content-->
-						<div class="modal fade" id="demengue" role="dialog">
-							<div class="modal-dialog">
-								<div class="modal-content">
-									<div class="modal-header">
-									<button type="button" class="close" data-dismiss="modal">&times;</button>
-									<h3 class="panel-title" align="center"><b><u>Service d'activation de compte en ligne</u></b></h3><br>
-									</div>
-									<div class="modal-body">
-									<h1 align="center">Bientôt disponible</h1>			
-									</div>
-								</div>
-							</div>
-						</div>
-						
+						</div>	
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
 
-	<div class="container" id=menu>
-		<div class="row vertical-offset-90">
-			<div class="panel-heading">
-				<button type="button" class="btn" data-toggle="modal"  id=LblClignotant2 data-target="#tchango"><img src="captiveportal-help.png" width="50" height="50"/></button>&nbsp;
-				<button type="button" class="btn" data-toggle="modal" data-target="#azebaze"><img src="captiveportal-playstore.png" width="50" height="50"/></button>&nbsp;
-				<button type="button" class="btn" data-toggle="modal" id=LblClignotant data-target="#demengue"><img src="captiveportal-activate.png" width="50" height="50"/></button>
-			</div>
-		</div>
-	</div>
-
-
-	<script type="text/javascript">
+	<script>
 		$(document).ready(function () {
-			$(document).mousemove(function (e) {
-				TweenLite.to($('body'),
-					.5,
-					{
-						css:
-							{
-								backgroundPosition: "" + parseInt(event.pageX / 8) + "px " + parseInt(event.pageY / '350') + "px, " + parseInt(event.pageX / '15') + "px " + parseInt(event.pageY / '100') + "px, " + parseInt(event.pageX / '30') + "px " + parseInt(event.pageY / '30') + "px"
-							}
-					});
+
+			// Reset checkboxes
+			$("#acceptConditions, #connexionstandard").prop("checked", false);
+
+			// Accept conditions → show login block
+			$("#acceptConditions").on("change", function () {
+				if (this.checked) {
+					$("#block-login").slideDown();
+					$("#block-qr").slideDown(); // show QR by default
+				} else {
+					$("#block-login").slideUp();
+					$("#block-connexionstandard").slideUp();
+					$("#block-qr").slideUp();
+					$("#connexionstandard").prop("checked", false);
+				}
 			});
+
+			// Standard login checkbox → toggle QR & standard form
+			$("#connexionstandard").on("change", function () {
+				if (this.checked) {
+					$("#block-connexionstandard").slideDown();
+					$("#block-qr").slideUp();   // 🔴 hide QR
+				} else {
+					$("#block-connexionstandard").slideUp();
+					$("#block-qr").slideDown(); // 🟢 show QR again
+				}
+			});
+
 		});
 	</script>
+
+	<script>
+		function onScanSuccess(decodedText, decodedResult) {
+			document.getElementById('result').innerText = `✅ Code Qr scanné`;
+			document.querySelector("input[name='auth_voucher']").value = decodedText;
+			html5QrcodeScanner.clear();
+		}
+
+		function onScanError(errorMessage) {
+			console.warn(`QR Scan Error: ${errorMessage}`);
+		}
+
+		const html5QrcodeScanner = new Html5QrcodeScanner(
+			"reader",
+			{ fps: 10, qrbox: 250 }
+		);
+		html5QrcodeScanner.render(onScanSuccess, onScanError);
+	</script>
+
 </body>
 </html>

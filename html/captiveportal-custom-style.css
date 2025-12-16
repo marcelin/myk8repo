@@ -1,0 +1,110 @@
+body {
+	background: url(captiveportal-login_bg.jpg) no-repeat center center fixed;
+	background: url(captiveportal-pinlayer2.png), url(captiveportal-pinlayer1.png);
+}
+
+@media (max-width: 673px) {
+	body{font-size: 12px;}
+}
+
+.vertical-offset-100 {
+	padding-top: 50px;
+}
+
+.flotte {
+	float: left;
+}
+
+.qr {
+	border: 1px dashed #7a7a7a;
+	border-radius: 12px;
+	padding: 1rem;
+	text-align: center;
+	margin-bottom: 1rem;
+}
+
+.small-note {
+	font-size:13px;
+	color:#97a9a9;
+	margin-top:8px
+}
+
+.divider {
+	text-align: center;
+	margin: 1rem 0;
+	color: #b9b8b8;
+}
+
+/* Allow absolute positioning inside panel */
+.panel-help {
+  position: relative;
+}
+
+/* Help button placed on the border */
+.help-btn {
+  position: absolute;
+  top: -16px;      /* half of icon height */
+  right: -16px;   /* sticks outside border */
+  background: white;
+  border-radius: 50%;
+  padding: 4px;
+  box-shadow: white;
+  z-index: 10;
+}
+
+/* Remove blue link style */
+.help-btn:hover,
+.help-btn:focus {
+  text-decoration: none;
+}
+
+img {
+	max-width: 100%;
+	height: auto;
+}
+
+#menu {
+	position: fixed;
+	right: 0;
+	top: 28%;
+	width: 7em;
+	margin-top: -2.5em;
+	background-color: rgba(9, 98, 8, 0.36);
+	border-radius: 2em 0.5em 0.5em 2em;
+}
+
+#reader {
+	width: 300px;
+	margin: auto;
+}
+
+#result {
+	margin-top: 20px;
+	font-size: 18px;
+	font-weight: bold;
+	color: rgb(100, 99, 99);
+	border-radius: 2em 0.5em 0.5em 2em;
+	text-align: center;
+}
+
+#block-login,
+#block-connexionstandard {
+    display: none;
+}
+
+/* Visible state */
+#block-login.show {
+	opacity: 1;
+	max-height: 800px; /* enough space for the form */
+}
+
+#LblClignotant {
+  animation: none !important;
+  -webkit-animation: none !important;
+}
+
+@keyframes pulse {
+	0% { opacity: 0.3; transform: scale(1); }
+	50% { opacity: 1; transform: scale(1.05); }
+	100% { opacity: 0.3; transform: scale(1); }
+}

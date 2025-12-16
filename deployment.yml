@@ -1,28 +1,23 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: nginx-deployment
+  name: captive-portal-deployment
   namespace: mynamespace
   labels:
-    app: nginx
+    app: captive-portal
 spec:
   selector:
     matchLabels:
-      app: nginx
+      app: captive-portal
   replicas: 3
-  strategy:
-    rollingUpdate:
-      maxSurge: 25%
-      maxUnavailable: 25%
-    type: RollingUpdate
   template:
     metadata:
       labels:
-        app: nginx
+        app: captive-portal
     spec:
       containers:
-      - name: nginx
-        image: stanley22/k8test:v0.0.1
+      - name: captive-portal
+        image: stanley22/captive-portal:v1.0
         resources:
           requests:
             cpu: 100m

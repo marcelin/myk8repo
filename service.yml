@@ -2,11 +2,11 @@ apiVersion: v1
 kind: Service
 metadata:
   name: captive-portal-service
-  namespace: mynamespace
+  namespace: default
 spec:
   selector:
     app: captive-portal
-  type: NodePort
+  type: ClusterIP
   sessionAffinity: None
   sessionAffinityConfig:
     clientIP:
@@ -16,4 +16,3 @@ spec:
     protocol: TCP
     port: 80
     targetPort: 80
-    nodePort: 30080

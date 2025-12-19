@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: captive-portal-deployment
-  namespace: mynamespace
+  namespace: default
   labels:
     app: captive-portal
 spec:
@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: captive-portal
-        image: stanley22/captive-portal:v1.0
+        image: stanley22/captive-portal:site3
         resources:
           requests:
             cpu: 100m
